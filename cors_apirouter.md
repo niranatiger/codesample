@@ -61,3 +61,21 @@ Deploy the application on AWS:
 
 Deploy your FastAPI application on AWS using services like AWS Lambda or AWS Elastic Beanstalk, depending on your requirements.
 By following these steps, you can use APIRouter from FastAPI to support OpenAPI CORS on AWS in Python. Remember to adjust the CORS configuration and API endpoints according to your specific needs.
+
+###do I also need to add an option endpoint so that browser can know it supports CORS?
+Yes, you can add an OPTIONS endpoint to your API to respond to CORS preflight requests. The preflight request is an HTTP OPTIONS request that the browser sends to check if the actual request (e.g., GET, POST) is allowed by the server.
+
+Here's an example of how you can add an OPTIONS endpoint to your API using FastAPI and APIRouter:
+
+    @router.options("/your-api-endpoint")
+    def options_your_api_endpoint():
+        response_headers = {
+            "Access-Control-Allow-Origin": "*",  # Add your allowed origins here
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        }
+        return Response(headers=response_headers)
+        
+In this example, the OPTIONS endpoint is defined with the @router.options decorator, and the response headers are explicitly set to allow the desired HTTP methods (e.g., GET, POST, PUT, DELETE) and headers (e.g., Authorization, Content-Type). Make sure to adjust the headers according to your specific CORS requirements.
+
+Including this OPTIONS endpoint allows the browser to receive the appropriate CORS headers and determine if the actual request is allowed by the server.
