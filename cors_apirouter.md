@@ -128,7 +128,7 @@ This ensures that the routes defined in the router object are included in the Fa
 
 By adding a global OPTIONS endpoint, any preflight request sent to your FastAPI application will be handled by that endpoint. The Access-Control-Allow-Methods and Access-Control-Allow-Headers headers will be included in the response, indicating the allowed methods and headers for your API.
 
-#can I use the apirouter to add the full path option endpoint?
+# can I use the apirouter to add the full path option endpoint?
 
 Yes, you can use APIRouter to add a global OPTIONS endpoint to handle preflight requests for all routes in your FastAPI application. Here's an example:
 
