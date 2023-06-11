@@ -79,3 +79,51 @@ Here's an example of how you can add an OPTIONS endpoint to your API using FastA
 In this example, the OPTIONS endpoint is defined with the @router.options decorator, and the response headers are explicitly set to allow the desired HTTP methods (e.g., GET, POST, PUT, DELETE) and headers (e.g., Authorization, Content-Type). Make sure to adjust the headers according to your specific CORS requirements.
 
 Including this OPTIONS endpoint allows the browser to receive the appropriate CORS headers and determine if the actual request is allowed by the server.
+
+# do I need to add OPTIONS endpoint for each router?
+
+No, you don't necessarily need to add an OPTIONS endpoint for each router. Instead, you can add a global OPTIONS endpoint that handles preflight requests for all routes in your FastAPI application.
+
+Here's an example of how you can add a global OPTIONS endpoint using FastAPI and APIRouter:
+
+Import the necessary modules:
+
+    from fastapi import FastAPI, Request, Response
+    from fastapi.routing import APIRouter
+    Create an instance of the FastAPI application:
+
+    app = FastAPI()
+
+Create a global OPTIONS endpoint:
+
+    @app.options("/{full_path:path}")
+    def options_handler(request: Request, full_path: str):
+        response_headers = {
+            "Access-Control-Allow-Origin": "*",  # Add your allowed origins here
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        }
+        return Response(headers=response_headers)
+    
+This OPTIONS endpoint uses a path parameter {full_path:path} to match any route in your application.
+
+Create an instance of the APIRouter:
+
+    router = APIRouter()
+    
+Define your API routes using the APIRouter instance:
+
+    @router.get("/your-api-endpoint")
+    def your_api_endpoint():
+        # Your API logic here
+        return {"data": "Hello, world!"}
+    
+You can add more endpoints to the router object using the appropriate decorators (@router.post, @router.put, etc.).
+
+Include the APIRouter in the FastAPI application:
+
+    app.include_router(router)
+        
+This ensures that the routes defined in the router object are included in the FastAPI application.
+
+By adding a global OPTIONS endpoint, any preflight request sent to your FastAPI application will be handled by that endpoint. The Access-Control-Allow-Methods and Access-Control-Allow-Headers headers will be included in the response, indicating the allowed methods and headers for your API.
