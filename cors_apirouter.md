@@ -127,3 +127,39 @@ Include the APIRouter in the FastAPI application:
 This ensures that the routes defined in the router object are included in the FastAPI application.
 
 By adding a global OPTIONS endpoint, any preflight request sent to your FastAPI application will be handled by that endpoint. The Access-Control-Allow-Methods and Access-Control-Allow-Headers headers will be included in the response, indicating the allowed methods and headers for your API.
+
+#can I use the apirouter to add the full path option endpoint?
+
+Yes, you can use APIRouter to add a global OPTIONS endpoint to handle preflight requests for all routes in your FastAPI application. Here's an example:
+
+    from fastapi import FastAPI, Request, Response
+    from fastapi.routing import APIRouter
+
+    app = FastAPI()
+
+    router = APIRouter()
+
+
+    @router.options("/{full_path:path}")
+    def options_handler(request: Request, full_path: str):
+        response_headers = {
+            "Access-Control-Allow-Origin": "*",  # Add your allowed origins here
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        }
+        return Response(headers=response_headers)
+
+
+    @app.get("/your-api-endpoint")
+    def your_api_endpoint():
+        # Your API logic here
+        return {"data": "Hello, world!"}
+
+
+    app.include_router(router)
+
+In this example, we create an instance of the APIRouter class called router. The options_handler function within the router handles the OPTIONS requests for any path specified as {full_path:path}.
+
+By including the router using app.include_router(router), the routes defined in the router will be included in the FastAPI application.
+
+This approach allows you to use APIRouter to define your regular API endpoints and include a global OPTIONS endpoint to handle preflight requests for all routes.
