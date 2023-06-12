@@ -1,4 +1,4 @@
-how to create an openapi spec with option to support cors?
+# how to create an openapi spec with option to support cors?
 
 To create an OpenAPI specification (formerly known as Swagger) with support for Cross-Origin Resource Sharing (CORS), you need to include the necessary information in your specification file. Here's a step-by-step guide on how to achieve that:
 
