@@ -1,1 +1,1 @@
-# This is only used for tech. No confidential information should be included here.
+# This is only used for general tech. No confidential information should be included here.
