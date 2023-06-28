@@ -40,3 +40,34 @@ Handle module output: If you have module outputs, make sure to handle the dynami
 Here, the output value is conditionally assigned based on the presence of the aws_api_gateway_rest_api resource.
 
 By following these steps, you can create a Terraform module that allows you to optionally assign the OpenAPI specification file and conditionally include resources based on its availability.
+
+# I use this way for the resouce aws_api_gateway_resouce, but hit the error "because aws_api_gateway_resouce.proxy_resouce has "count" set, its attributes must be accessed on specifict instances.", it says Missing resouce instance key
+
+I apologize for the confusion. The error message you encountered suggests that when using the count argument with the aws_api_gateway_resource resource, you need to access the attributes of the resource using specific instance indices.
+
+The count argument creates multiple instances of a resource, and each instance must be accessed individually. To resolve the error, you should modify your code to access the attributes of each instance using the instance indices.
+
+Here's an example of how you can modify your code:
+
+
+    resource "aws_api_gateway_resource" "proxy_resource" {
+      count    = var.create_resource ? 1 : 0
+      rest_api_id = aws_api_gateway_rest_api.example.id
+      parent_id   = aws_api_gateway_rest_api.example.root_resource_id
+      path_part   = var.path_part
+    
+      # Other resource configuration
+    }
+
+To access the attributes of the aws_api_gateway_resource instances, you need to specify the instance indices explicitly. For example, to access the path attribute of the first instance, you would use:
+
+
+    aws_api_gateway_resource.proxy_resource[0].path
+    
+If you have multiple instances (e.g., count = 3), you can access the attributes of each instance using their respective indices:
+
+    aws_api_gateway_resource.proxy_resource[0].path
+    aws_api_gateway_resource.proxy_resource[1].path
+    aws_api_gateway_resource.proxy_resource[2].path
+    
+Make sure to adjust your code accordingly, accessing the attributes of the specific instances you are interested in.
